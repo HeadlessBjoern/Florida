@@ -25,11 +25,19 @@ addpath(FUNS_PATH)
 % manage screens
 screenSettings
 
-%% Collect ID and Age  
+%% Collect subject infos 
 dialogID;
 
 %% Protect Matlab code from participant keyboard input
 ListenChar(2);
+
+%% Set up stimuli list
+stimID;
+
+for stims = 1:numel(stimIDs)
+    % Randomize stimulus list
+    randStim(stims) = randi([1, numel(stimIDs)]);
+end
 
 %% Run IAPS
 IAPS;

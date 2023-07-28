@@ -33,11 +33,7 @@ ListenChar(2);
 
 %% Set up stimuli list
 stimID;
-
-for stims = 1:numel(stimIDs)
-    % Randomize stimulus list
-    randStim(stims) = randi([1, numel(stimIDs)]);
-end
+stimIDs = stimIDs(randperm(numel(stimIDs)));
 
 %% Run IAPS
 IAPS;

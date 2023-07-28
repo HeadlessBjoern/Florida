@@ -152,16 +152,17 @@ for trial = 1:numel(stimIDs)
         sendtrigger(FIXATION,port,SITE,stayup);
 
         % Wait for a jittered interval of 2 - 3s
-        timing.cfi(trial) = (randsample(2000:3000, 1))/1000; % Duration of the jittered inter-trial interval
-        WaitSecs(timing.cfi(trial));
+%         timing.cfi(trial) = (randsample(2000:3000, 1))/1000; % Duration of the jittered inter-trial interval
+        timing.cfi(trial) = 0.01;
+WaitSecs(timing.cfi(trial));
 
         %% Presentation of stimulus (2s)
 
         % Pick .bpm file name from randomized list of all pictures
-        stimID(trial) = stimIDs(randStim(trial));
+        stimID(trial) = stimIDs(trial);
 
         % Load the image
-        img = imread(['/home/methlab/Desktop/IAPS/IAPS_stimuli2/' num2str(stimID(trial)) '.bmp']);
+        img = imread(['/home/methlab/Desktop/IAPS/Stimuli/' num2str(stimID(trial)) '.bmp']);
 
         % Convert the image matrix to a Psychtoolbox texture
         imgTexture = Screen('MakeTexture', ptbWindow, img);
@@ -189,19 +190,22 @@ for trial = 1:numel(stimIDs)
         if ismember(stimIDtbl, tblPos) == 1
             TRIGGER = POSITIVE;
             disp(['Positive Stimulus: ' num2str(stimID(trial))])
+            data.condition(trial) = 1;
         elseif ismember(stimIDtbl, tblNeg) == 1
             TRIGGER = NEGATIVE;
             disp(['Negative Stimulus: ' num2str(stimID(trial))])
+            data.condition(trial) = 2;
         elseif ismember(stimIDtbl, tblNeut) == 1
             TRIGGER = NEUTRAL;
             disp(['Neutral Stimulus: ' num2str(stimID(trial))])
+            data.condition(trial) = 3;
         end
         Eyelink('Message', num2str(TRIGGER));
         Eyelink('command', 'record_status_message "STIMULUS"');
         sendtrigger(TRIGGER,port,SITE,stayup);
 
         % Display picture for 2 seconds
-        WaitSecs(2);
+        WaitSecs(0.02);
 
     catch
         psychrethrow(psychlasterror);

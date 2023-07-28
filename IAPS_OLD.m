@@ -121,6 +121,9 @@ sendtrigger(TASK_START,port,SITE,stayup);
 
 HideCursor(whichScreen);
 
+
+
+
 %% Experiment Loop
 for trial = 1:numel(stimIDs)
     try
@@ -129,15 +132,13 @@ for trial = 1:numel(stimIDs)
         %% Central fixation interval (jittered 2000 - 3000ms)
         % Load the image
         img = imread('/home/methlab/Desktop/IAPS/FIXATION.BMP');
+[ptbWindow, winRect] = PsychImaging('OpenWindow', screenID, equipment.greyVal);
 
-%         img = imresize(img, [800 600 3]);
         % Convert the image matrix to a Psychtoolbox texture
-        fixTexture = Screen('MakeTexture', ptbWindow, img);
+        imgTexture = Screen('MakeTexture', ptbWindow, img);
 
         % Get the size of the image
-        [imgHeight, imgWidth, dim3] = size(img);
-        disp(imgWidth)
-        disp(imgHeight) 
+        [imgWidth, imgHeight] = size(img);
 
         % Get the center coordinates of the screen
         [screenX, screenY] = RectCenter(winRect);
@@ -146,7 +147,7 @@ for trial = 1:numel(stimIDs)
         dstRect = [screenX - imgWidth / 2, screenY - imgHeight / 2, screenX + imgWidth / 2, screenY + imgHeight / 2];
 
         % Draw the image on the screen
-        Screen('DrawTexture', ptbWindow, fixTexture, [], dstRect);
+        Screen('DrawTexture', ptbWindow, imgTexture, [], dstRect);
         Screen('Flip', ptbWindow);
 
         % Send triggers for fixation
@@ -160,20 +161,17 @@ for trial = 1:numel(stimIDs)
 
         %% Presentation of stimulus (2s)
 
-        % Pick .bpm file name from randomized list of all pictures
+        % Pick randomized .bpm file name from list of all pictures
         stimID(trial) = stimIDs(randStim(trial));
 
         % Load the image
         img = imread(['/home/methlab/Desktop/IAPS/IAPS_stimuli2/' num2str(stimID(trial)) '.bmp']);
 
-
         % Convert the image matrix to a Psychtoolbox texture
         imgTexture = Screen('MakeTexture', ptbWindow, img);
 
         % Get the size of the image
-        [imgHeight, imgWidth, dim3] = size(img);
-        disp(imgWidth)
-        disp(imgHeight) 
+        [imgWidth, imgHeight] = size(img);
 
         % Get the center coordinates of the screen
         [screenX, screenY] = RectCenter(winRect);
@@ -194,8 +192,8 @@ for trial = 1:numel(stimIDs)
         % Display picture for 2 seconds
         WaitSecs(2);
 
-%         % Clear the screen and textures
-%         sca;
+        % Clear the screen and textures
+        sca;
 
     catch
         psychrethrow(psychlasterror);

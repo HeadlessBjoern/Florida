@@ -135,7 +135,7 @@ for trial = 1:numel(stimIDs)
         fixTexture = Screen('MakeTexture', ptbWindow, img);
 
         % Get the size of the image
-        [imgHeight, imgWidth, dim3] = size(img);
+        [imgWidth, imgHeight, dim3] = size(img);
         disp(imgWidth)
         disp(imgHeight) 
 
@@ -171,10 +171,10 @@ for trial = 1:numel(stimIDs)
         imgTexture = Screen('MakeTexture', ptbWindow, img);
 
         % Get the size of the image
-        [imgHeight, imgWidth, dim3] = size(img);
+        [imgWidth, imgHeight, dim3] = size(img);
         disp(imgWidth)
         disp(imgHeight) 
-
+        
         % Get the center coordinates of the screen
         [screenX, screenY] = RectCenter(winRect);
 

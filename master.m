@@ -13,8 +13,8 @@ rootFilepath = pwd; % Retrieve the present working directory
 % define paths
 PPDEV_PATH = '/home/methlab/Documents/MATLAB/ppdev-mex-master'; % for sending EEG triggers
 TITTA_PATH = '/home/methlab/Documents/MATLAB/Titta'; % for Tobii ET
-DATA_PATH = '/home/methlab/Desktop/Florida/data'; % folder to save data
-FUNS_PATH = '/home/methlab/Desktop/Florida' ; % folder with all functions
+DATA_PATH = '/home/methlab/Desktop/IAPS/data'; % folder to save data
+FUNS_PATH = '/home/methlab/Desktop/IAPS' ; % folder with all functions
 
 % make data dir, if doesn't exist yet
 mkdir(DATA_PATH)

@@ -78,3 +78,11 @@ stimIDs = [3059
 9414
 9571
 9599];
+
+%% Read tables of conditions
+
+tblNeg = readtable('SoCo_NegPix.txt');
+tblPos = readtable('SoCo_PosPix.txt');
+tblNeut = readtable('SoCo_NeutPix.txt');
+
+

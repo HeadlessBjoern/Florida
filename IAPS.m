@@ -19,6 +19,9 @@ HideCursor(whichScreen);
 TASK_START = 10; % trigger for ET cutting
 FIXATION = 15; % trigger for fixation cross
 PRESENTATION = 21; % trigger for digit presentation
+POSITIVE = 31; %trigger for positive condition
+NEGATIVE = 32; %trigger for negative condition
+NEUTRAL = 33;  %trigger for neutral condition
 TASK_END = 90; % trigger for ET cutting
 
 % Set up equipment parameters
@@ -50,9 +53,6 @@ startExperimentText = ['You will see a number of pictures in a row. \n\n' ...
     'Please look at the center of the screen. \n\n' ...
     '\n\n' ...
     'Press any key to continue.'];
-
-% Set up temporal parameters (in seconds)
-timing.presentation = 2;     % Duration of digit presentation
 
 % Shuffle rng for random elements
 rng('default');
@@ -130,14 +130,11 @@ for trial = 1:numel(stimIDs)
         % Load the image
         img = imread('/home/methlab/Desktop/IAPS/FIXATION.BMP');
 
-%         img = imresize(img, [800 600 3]);
         % Convert the image matrix to a Psychtoolbox texture
         fixTexture = Screen('MakeTexture', ptbWindow, img);
 
         % Get the size of the image
         [imgHeight, imgWidth, dim3] = size(img);
-        disp(imgWidth)
-        disp(imgHeight) 
 
         % Get the center coordinates of the screen
         [screenX, screenY] = RectCenter(winRect);
@@ -166,14 +163,11 @@ for trial = 1:numel(stimIDs)
         % Load the image
         img = imread(['/home/methlab/Desktop/IAPS/IAPS_stimuli2/' num2str(stimID(trial)) '.bmp']);
 
-
         % Convert the image matrix to a Psychtoolbox texture
         imgTexture = Screen('MakeTexture', ptbWindow, img);
 
         % Get the size of the image
         [imgHeight, imgWidth, dim3] = size(img);
-        disp(imgWidth)
-        disp(imgHeight) 
 
         % Get the center coordinates of the screen
         [screenX, screenY] = RectCenter(winRect);
@@ -186,16 +180,28 @@ for trial = 1:numel(stimIDs)
         Screen('Flip', ptbWindow);
 
         % Send triggers for presentation
-        TRIGGER = PRESENTATION;
+        Eyelink('Message', num2str(PRESENTATION));
+        Eyelink('command', 'record_status_message "STIMULUS"');
+        sendtrigger(PRESENTATION,port,SITE,stayup);
+
+        % Send triggers for condition
+        stimIDtbl = table(stimID(trial));
+        if ismember(stimIDtbl, tblPos) == 1
+            TRIGGER = POSITIVE;
+            disp(['Positive Stimulus: ' num2str(stimID(trial))])
+        elseif ismember(stimIDtbl, tblNeg) == 1
+            TRIGGER = NEGATIVE;
+            disp(['Negative Stimulus: ' num2str(stimID(trial))])
+        elseif ismember(stimIDtbl, tblNeut) == 1
+            TRIGGER = NEUTRAL;
+            disp(['Neutral Stimulus: ' num2str(stimID(trial))])
+        end
         Eyelink('Message', num2str(TRIGGER));
         Eyelink('command', 'record_status_message "STIMULUS"');
         sendtrigger(TRIGGER,port,SITE,stayup);
 
         % Display picture for 2 seconds
         WaitSecs(2);
-
-%         % Clear the screen and textures
-%         sca;
 
     catch
         psychrethrow(psychlasterror);
@@ -236,6 +242,9 @@ trigger = struct;
 trigger.FIXATION = FIXATION;
 trigger.TASK_START = TASK_START;
 trigger.PRESENTATION = PRESENTATION;
+trigger.POSITIVE = POSITIVE;
+trigger.NEGATIVE = NEGATIVE;
+trigger.NEUTRAL = NEUTRAL;
 trigger.TASK_END = TASK_END;
 
 % Stop and close EEG and ET recordings

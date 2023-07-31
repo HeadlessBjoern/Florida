@@ -152,9 +152,8 @@ for trial = 1:numel(stimIDs)
         sendtrigger(FIXATION,port,SITE,stayup);
 
         % Wait for a jittered interval of 2 - 3s
-%         timing.cfi(trial) = (randsample(2000:3000, 1))/1000; % Duration of the jittered inter-trial interval
-        timing.cfi(trial) = 0.01;
-WaitSecs(timing.cfi(trial));
+        timing.cfi(trial) = (randsample(2000:3000, 1))/1000; % Duration of the jittered inter-trial interval
+        WaitSecs(timing.cfi(trial));
 
         %% Presentation of stimulus (2s)
 
@@ -205,7 +204,7 @@ WaitSecs(timing.cfi(trial));
         sendtrigger(TRIGGER,port,SITE,stayup);
 
         % Display picture for 2 seconds
-        WaitSecs(0.02);
+        WaitSecs(2);
 
     catch
         psychrethrow(psychlasterror);
